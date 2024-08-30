@@ -7,7 +7,7 @@ import { useRef } from "react";
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 export default function Home() {
-  const container = useRef();
+  const container = useRef(null);
   useGSAP(() => {
     gsap.from('.box', {
       scrollTrigger: {

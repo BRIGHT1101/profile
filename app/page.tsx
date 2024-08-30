@@ -1,49 +1,38 @@
-import { Button } from "@/components/ui/button";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
+"use client";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRef } from "react";
 
-async function fetchData() {
-  try {
-    const response = await fetch("http://localhost:3000/api"); // API 엔드포인트 경로
-    if (response.ok) {
-      const data = await response.json();
-      return data.greeting;
-    } else {
-      console.error("Error fetching data");
-    }
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-export default async function Home() {
-  const a = await fetchData();
+export default function Home() {
+  const container = useRef();
+  useGSAP(() => {
+    gsap.from('.box', {
+      scrollTrigger: {
+        trigger: '.box',
+        scrub: 2,
+        start: "top bottom",
+        end: "top 10%",
+        markers: true,
+        snap: {snapTo: "labels", duration: 0.3, delay: 0.1, ease: "power1.inOut"}
+      },
+      opacity: 0,
+      filter: "blur(20px)",
+      scale: 0.9,
+      borderRadius: "100px",
+  });
+  
+  }, { scope: container }); 
+
   return (
-    <main className="text-[100px]">
-      <div>{a}</div>
-      <Drawer>
-        <DrawerTrigger>hi</DrawerTrigger>
-        <DrawerContent>
-          <DrawerHeader>
-            <DrawerTitle>Are you absolutely sure?</DrawerTitle>
-            <DrawerDescription>This action cannot be undone.</DrawerDescription>
-          </DrawerHeader>
-          <DrawerFooter>
-            <Button>Submit</Button>
-            <DrawerClose>
-              <Button variant="outline">Cancel</Button>
-            </DrawerClose>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
+    <main className="text-[100px]" ref={container}>
+      <div className="overflow-hidden h-screen ">
+      </div>
+      <div className="overflow-hidden h-screen box blur-[2px]">
+        <img src='/dunkin.png' className="w-full" />
+      </div>
     </main>
   );
 }

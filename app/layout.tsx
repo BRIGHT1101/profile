@@ -17,7 +17,7 @@ export default function RootLayout({
     <html lang="ko">
       <Analytics />
       <SpeedInsights />
-      <body className="bg-background">{children}</body>
+      <body className="">{children}</body>
     </html>
   );
 }

@@ -3,136 +3,207 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
-import { useEffect, useRef, useState } from "react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { TextPlugin } from "gsap/TextPlugin";
+import { useState } from "react";
+import { Draggable } from "gsap/Draggable";
+import Donuts  from "@/components/Donuts";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin);
+gsap.registerPlugin(
+  useGSAP,
+  ScrollTrigger,
+  ScrollToPlugin,
+  TextPlugin,
+  Draggable
+);
 
 export default function Home() {
   const [num, setNum] = useState(0);
   const projects = [
     {
       title: "던킨도너츠",
-      period: "24.01.20 - 24.08.11",
+      period: "2023.10 ~ 2024.07",
       img: "/1.png",
       icon: "/donut.png",
+      color: "#FFC0CB",
+    },
+    {
+      title: "카카오 뉴스룸",
+      period: "2023.07 ~ 2023.08",
+      img: "/1.png",
+      icon: "/icecream.png",
+      color: "#FF6347",
+    },
+    {
+      title: "BBQ 치킨대학",
+      period: "2023.04 ~ 2023.05",
+      img: "/1.png",
+      icon: "/icecream.png",
+      color: "#FFD700",
+    },
+    {
+      title: "더에스엠씨그룹",
+      period: "2023.06 ~ 2023.06",
+      img: "/1.png",
+      icon: "/icecream.png",
+      color: "#FF69B4",
+    },
+    {
+      title: "던킨허브",
+      period: "2023.01 ~ 2023.02",
+      img: "/1.png",
+      icon: "/icecream.png",
+      color: "#FF69B4",
+    },
+    {
+      title: "배라매거진",
+      period: "2023.03 ~ 2023.04",
+      img: "/1.png",
+      icon: "/icecream.png",
+      color: "#FF69B4",
+    },
+    {
+      title: "SK에코플랜트 뉴스룸",
+      period: "2022.09 ~ 2022.10",
+      img: "/1.png",
+      icon: "/icecream.png",
+      color: "#FF69B4",
+    },
+    {
+      title: "고구마팜",
+      period: "2022.11 ~ 2023.01",
+      img: "/1.png",
+      icon: "/icecream.png",
+      color: "#FF69B4",
+    },
+    {
+      title: "현대백화점 블로그",
+      period: "2024.04 ~ 2024.04",
+      img: "/1.png",
+      icon: "/icecream.png",
+      color: "#FF69B4",
+    },
+    {
+      title: "MBNC 메타버즈네스트클럽",
+      period: "2022.04 ~ 2022.05",
+      img: "/1.png",
+      icon: "/icecream.png",
+      color: "#FF69B4",
+    },
+  ];
+  const maintenance = [
+    {
+      title: "삼성반도체 뉴스룸",
+      img: "/1.png",
+      icon: "/donut.png",
+      color: "#FFC0CB",
+    },
+    {
+      title: "롯데월드 마이크로사이트",
+      img: "/1.png",
+      icon: "/donut.png",
+      color: "#FFC0CB",
+    },
+    {
+      title: "서울대 경영대 뉴스룸",
+      img: "/1.png",
+      icon: "/donut.png",
+      color: "#FFC0CB",
     },
     {
       title: "배스킨라빈스",
-      period: "24.01.20 - 24.08.11",
       img: "/1.png",
-      icon: "/icecream.png",
+      icon: "/donut.png",
+      color: "#FFC0CB",
     },
     {
-      title: "삼성전자",
-      period: "24.01.20 - 24.08.11",
+      title: "아이스크림 콘테스트",
       img: "/1.png",
-      icon: "/icecream.png",
+      icon: "/donut.png",
+      color: "#FFC0CB",
     },
     {
       title: "아이템티티",
-      period: "24.01.20 - 24.08.11",
       img: "/1.png",
-      icon: "/icecream.png",
+      icon: "/donut.png",
+      color: "#FFC0CB",
     },
   ];
   const size = projects.length - 1;
   const stepSize = 1 / size;
   useGSAP(() => {
-    gsap.fromTo(
-      ".item",
-      { x: 0 },
-      {
-        scrollTrigger: {
-          trigger: ".item",
-          scrub: 1,
-          pin: ".bg",
-          markers: true,
-          onUpdate: (self) => {
-            setNum(Math.floor(self.progress / stepSize));
-          },
+    const horizontal = gsap.to(".item", {
+      scrollTrigger: {
+        trigger: ".item",
+        scrub: 1,
+        pin: ".bg",
+        onUpdate: (self) => {
+          setNum(Math.floor(self.progress / stepSize));
         },
-        ease: "none",
-        x: `-${100 * size}%`,
-      }
-    );
+      },
+      ease: "none",
+      x: `-${100 * size}%`,
+    });
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        containerAnimation: horizontal,
+        trigger: ".donuts",
+        scrub: 1,
+        markers: true,
+      },
+    });
+    tl.fromTo(
+      ".title",
+      { scale: 0.1, opacity: 0, y: "100%" },
+      {
+        scale: 1,
+        opacity: 1,
+        y: 0,
+      },
+      ">50%"
+    ).to(".title", { scale: 0.1, opacity: 0, y: "-100%" }, ">90%");
+    Draggable.create(".donut", {
+      bounds: ".donuts",
+    });
+
+    gsap.fromTo(".donut", {opacity:0, y: "10%"}, {
+      scrollTrigger: {
+        trigger: ".donuts",
+        start: "50%",
+        containerAnimation: horizontal,
+        scrub: 1,
+        end: "center"
+      },
+      opacity: 1,
+      stagger: 0.1,
+    y: 0})
   });
 
-  function handleClick(index) {
+  function handleClick(index : number) {
     gsap.to(window, {
-      duration: 2,
+      duration: 1,
       scrollTo: { y: (innerHeight / size) * index + 1 },
-      ease: "power2",
     });
   }
+
   return (
-    <main className="text-[100px] bg bg-red-50">
+    <main
+      className="text-[100px] bg transition-colors duration-500"
+      style={{ backgroundColor: projects[num].color }}>
       <div className="relative">
-        <div className="item flex h-screen">
-          {projects.map((project, index) => {
-            return (
-              <div
-                key={index}
-                id={project.title}
-                className={`${project.title} flex-none overflow-hidden w-screen h-full box flex flex-col justify-center items-center`}>
-                <Dialog>
-                  <DialogTrigger className="w-1/2">
-                    <div className="">
-                      <h2 className="font-black italic text-[4vw] text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-blue-50">
-                        {project.title}
-                      </h2>
-                      <img
-                        src={project.img}
-                        className="w-full block rounded-2xl overflow-hidden shadow"
-                      />
-                    </div>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Are you absolutely sure?</DialogTitle>
-                      <DialogDescription>
-                        This action cannot be undone. This will permanently
-                        delete your account and remove your data from our
-                        servers.
-                      </DialogDescription>
-                    </DialogHeader>
-                  </DialogContent>
-                </Dialog>
-              </div>
-            );
-          })}
+        <div className="item h-screen">
+          <Donuts project={projects[0]} index={0} />
         </div>
-        <div className="absolute bottom-5 left-1/2 text-[20px] flex -translate-x-1/2 rounded-full py-[.3vw] px-[2.5vw] bg-white leading-none shadow">
+        <div className="w-max absolute bottom-5 left-1/2 text-[20px] flex -translate-x-1/2 rounded-full py-[.4vw] px-[2vw] bg-white/70 backdrop-blur-lg leading-none shadow">
           {projects.map((project, index) => {
             return (
               <div key={index}>
-                <TooltipProvider delayDuration={0}>
-                  <Tooltip>
-                    <TooltipTrigger
-                      onClick={() => handleClick(index)}
-                      className={`transition-colors duration-300 rounded-md italic text-[1.5vw] px-[1vw] py-[.6vw] ${
-                        index === num ? "bg-gray-200" : ""
-                      }`}>
-                      <img src={project.icon} className="w-[2vw] " />
-                    </TooltipTrigger>
-                    <TooltipContent className="bg-white text-[1vw] italic">
-                      <p className="invert">{project.title}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <div
+                  onClick={() => handleClick(index)}
+                  className={`flex-none transition-colors duration-300 rounded-md italic text-[1vw] px-[1vw] py-[.6vw] ${
+                    index === num ? "bg-gray-50/80" : ""
+                  }`}>
+                  <img src={project.icon} className="w-[1.5vw]" alt="" />
+                </div>
               </div>
             );
           })}
